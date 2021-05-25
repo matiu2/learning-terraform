@@ -20,11 +20,7 @@ resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.matiu_vpc.id
   cidr_block              = var.public_cidrs[count.index]
   map_public_ip_on_launch = true
-  availability_zone = [
-    "ap-southeast-2a",
-    "ap-southeast-2b",
-    "ap-southeast-2c"
-  ][count.index]
+  availability_zone       = local.availability_zones[count.index % length(local.availability_zones)]
   tags = {
     Name = "matiu-public-${count.index + 1}"
   }
