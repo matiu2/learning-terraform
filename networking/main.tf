@@ -25,3 +25,13 @@ resource "aws_subnet" "public_subnet" {
     Name = "matiu-public-${count.index + 1}"
   }
 }
+
+resource "aws_subnet" "private_subnet" {
+  count             = length(var.private_cidrs)
+  vpc_id            = aws_vpc.matiu_vpc.id
+  cidr_block        = var.private_cidrs[count.index]
+  availability_zone = local.availability_zones[count.index % length(local.availability_zones)]
+  tags = {
+    Name = "matiu-private-${count.index + 1}"
+  }
+}

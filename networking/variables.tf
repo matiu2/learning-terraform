@@ -8,3 +8,10 @@ variable "public_cidrs" {
   type        = list(string)
   description = "The CIDR's of the subnets that will have routes to the internet gateway"
 }
+
+
+variable "private_cidrs" {
+  type        = list(string)
+  description = "The CIDR's of the internal/private subnets"
+}
+
