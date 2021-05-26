@@ -6,9 +6,12 @@ resource "random_integer" "random" {
 }
 
 resource "random_shuffle" "az-chooser" {
-  keepers      = { azs = join(":", data.aws_availability_zones.azs.names) }
+  keepers = {
+    azs = join(":", sort(data.aws_availability_zones.azs.names)),
+  }
   input        = data.aws_availability_zones.azs.names
-  result_count = var.private_subnet_count + var.public_subnet_count
+  result_count = 20
+  seed         = "Happiness"
 }
 
 resource "aws_vpc" "matiu_vpc" {
@@ -18,6 +21,10 @@ resource "aws_vpc" "matiu_vpc" {
 
   tags = {
     Name = "matiu_vpc-${random_integer.random.id}"
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
