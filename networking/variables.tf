@@ -21,5 +21,3 @@ variable "private_subnet_count" {
     error_message = "Variable private_subnet_count must be less than 255."
   }
 }
-
-
