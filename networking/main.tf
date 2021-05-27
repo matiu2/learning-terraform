@@ -85,6 +85,15 @@ resource "aws_security_group" "matiu-pubs" {
       cidr_blocks = ingress.value.cidr_blocks
     }
   }
+  dynamic "ingress" {
+    for_each = { for i in range(length(each.value.allowed_ingress_ports)) : "${i}" => { port = each.value.allowed_ingress_ports[i] } }
+    content {
+      from_port   = ingress.value.port
+      to_port     = ingress.value.port
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
 }
 
 resource "aws_security_group_rule" "matiu-pubs-all-egress" {
