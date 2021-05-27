@@ -34,3 +34,8 @@ variable "ssh_access_cidr" {
 variable "security_groups" {
   description = "Inbound security groups"
 }
+
+variable "db_subnet_group" {
+  type        = bool
+  description = "Should we create a subnet group for the DB layer ? Generally yes in prod, and no in dev (due to less DB instances)"
+}

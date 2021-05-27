@@ -5,4 +5,5 @@ module "networking" {
   private_subnet_count = 3
   ssh_access_cidr      = var.ssh_access_cidr
   security_groups      = local.security_groups
+  db_subnet_group      = false
 }

@@ -107,3 +107,11 @@ resource "aws_security_group_rule" "matiu-security-groups-all-egress" {
   security_group_id = each.value.id
 }
 
+resource "aws_db_subnet_group" "matiu-rds-subnets" {
+  count      = var.db_subnet_group ? 1 : 0
+  name       = "matiu-rds-subnet-group"
+  subnet_ids = aws_subnet.private_subnet.*.id
+  tags = {
+    Name = "matiu-rds-subnet-group"
+  }
+}
