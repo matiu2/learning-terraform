@@ -30,3 +30,7 @@ variable "ssh_access_cidr" {
     error_message = "This must be a valid cidr block."
   }
 }
+
+variable "security_groups" {
+  description = "Inbound security groups"
+}
