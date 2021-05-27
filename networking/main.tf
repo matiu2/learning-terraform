@@ -70,3 +70,28 @@ resource "aws_default_route_table" "matiu-default-rt" {
   default_route_table_id = aws_vpc.matiu_vpc.default_route_table_id
   tags                   = { Name = "matiu-default-rt" }
 }
+
+resource "aws_security_group" "matiu-sg-pub" {
+  name        = "public-sg"
+  description = "Security group for public access"
+  vpc_id      = aws_vpc.matiu_vpc.id
+}
+
+resource "aws_security_group_rule" "matiu-sg-pub-ssh-in" {
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = [var.ssh_access_cidr]
+  security_group_id = aws_security_group.matiu-sg-pub.id
+}
+
+resource "aws_security_group_rule" "matiu-sg-pub-all-egress" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "all"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.matiu-sg-pub.id
+}
+
