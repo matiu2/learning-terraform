@@ -71,7 +71,7 @@ resource "aws_default_route_table" "matiu-default-rt" {
   tags                   = { Name = "matiu-default-rt" }
 }
 
-resource "aws_security_group" "matiu-pubs" {
+resource "aws_security_group" "matiu-security-groups" {
   for_each    = var.security_groups
   name        = each.value.name
   description = each.value.description
@@ -96,9 +96,9 @@ resource "aws_security_group" "matiu-pubs" {
   }
 }
 
-resource "aws_security_group_rule" "matiu-pubs-all-egress" {
+resource "aws_security_group_rule" "matiu-security-groups-all-egress" {
   // All public security groups get full egress
-  for_each          = aws_security_group.matiu-pubs
+  for_each          = aws_security_group.matiu-security-groups
   type              = "egress"
   from_port         = 0
   to_port           = 0

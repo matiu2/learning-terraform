@@ -13,5 +13,19 @@ locals {
         },
       },
     },
+    rds = {
+      name                  = "rds-sg"
+      description           = "Security group for the RDS instances"
+      allowed_ingress_ports = []
+      ingress_rules = {
+        mysql = {
+          from        = 3306
+          to          = 3306
+          protocol    = "tcp"
+          cidr_blocks = [var.vpc_cidr]
+        }
+      }
+
+    }
   }
 }
