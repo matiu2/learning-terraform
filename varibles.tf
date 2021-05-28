@@ -18,3 +18,29 @@ variable "ssh_access_cidr" {
     error_message = "This must be a valid cidr block."
   }
 }
+
+variable "db_name" {
+  type        = string
+  description = "Database name"
+  validation {
+    condition     = length(var.db_name) > 0
+    error_message = "Database name can't be empty."
+  }
+}
+
+variable "db_username" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.db_username) > 0
+    error_message = "DB Username can't be empty."
+  }
+}
+variable "db_password" {
+  type      = string
+  sensitive = true
+  validation {
+    condition     = length(var.db_password) >= 8
+    error_message = "DB Password must be at least 8 characters."
+  }
+}
