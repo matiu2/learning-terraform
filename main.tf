@@ -23,7 +23,13 @@ module "networking" {
 # }
 
 module "lb" {
-  source          = "./loadbalancing"
-  security_groups = [module.networking.db_security_group_id]
-  public_subnets  = module.networking.public_subnet_ids
+  source              = "./loadbalancing"
+  security_groups     = [module.networking.db_security_group_id]
+  public_subnets      = module.networking.public_subnet_ids
+  vpc_id              = module.networking.vpc_id
+  healthy_threshold   = 2
+  unhealthy_threshold = 2
+  tg_port             = 80
+  tg_protocol         = "HTTP"
+  interval            = 30
 }
