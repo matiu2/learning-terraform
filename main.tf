@@ -35,3 +35,19 @@ module "lb" {
   listener_port       = 80
   listener_protocol   = "HTTP"
 }
+
+data "aws_security_group" "public" {
+  name = local.security_groups.public.name
+  depends_on = [
+    module.networking,
+  ]
+}
+
+module "compute" {
+  source         = "./compute"
+  instance_count = 2
+  instance_type  = "t3.micro"
+  public_sg      = data.aws_security_group.public.id
+  public_subnets = module.networking.public_subnet_ids
+  vol_size       = 10
+}
