@@ -37,4 +37,7 @@ resource "aws_instance" "matiu-ec2-instance" {
     dbpass      = var.db_password
     dbname      = var.db_name
   })
+  lifecycle {
+    create_before_destroy = true
+  }
 }
