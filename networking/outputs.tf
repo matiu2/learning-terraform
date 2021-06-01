@@ -4,7 +4,7 @@ output "vpc_id" {
 output "db_security_group_id" {
   value = aws_security_group.matiu-security-groups["rds"].id
 }
-output "db_subnet_group_name" {
+output "db_subnet_group_names" {
   value = aws_db_subnet_group.matiu-rds-subnets.*.name
 }
 
