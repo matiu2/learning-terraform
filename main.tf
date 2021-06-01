@@ -5,7 +5,7 @@ module "networking" {
   private_subnet_count = 3
   ssh_access_cidr      = var.ssh_access_cidr
   security_groups      = local.security_groups
-  db_subnet_group      = false
+  db_subnet_group      = true
 }
 
 module "database" {
@@ -16,8 +16,8 @@ module "database" {
   name                   = var.db_name
   username               = var.db_username
   password               = var.db_password
-  subnet_group_name      = ""
-  vpc_security_group_ids = []
+  subnet_group_name      = module.networking.db_subnet_group_names[0]
+  vpc_security_group_ids = [module.networking.db_security_group_id]
   identifier             = "matiu-db"
   skip_final_snapshot    = true
 }
