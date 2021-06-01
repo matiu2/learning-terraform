@@ -30,4 +30,11 @@ resource "aws_instance" "matiu-ec2-instance" {
     volume_size = var.vol_size
   }
   key_name = aws_key_pair.ssh-pub-key.key_name
+  user_data = templatefile(var.user_data_tmpl_path, {
+    nodename    = aws_instance.matiu-ec2-instance[count.index].tags.Name
+    db_endpoint = var.db_endpoint
+    dbuser      = var.db_username
+    dbpass      = var.db_password
+    dbname      = var.db_name
+  })
 }

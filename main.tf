@@ -8,20 +8,19 @@ module "networking" {
   db_subnet_group      = false
 }
 
-# module "database" {
-#   source                 = "./database"
-#   storage                = 10
-#   engine_version         = "5.7.22"
-#   instance_class         = "db.t2.micro"
-#   name                   = "rancher"
-#   username               = var.db_username
-#   password               = var.db_password
-#   subnet_group_name      = ""
-#   vpc_security_group_ids = []
-#   identifier             = "matiu-db"
-#   skip_final_snapshot    = true
-# }
-
+module "database" {
+  source                 = "./database"
+  storage                = 10
+  engine_version         = "5.7.22"
+  instance_class         = "db.t2.micro"
+  name                   = var.db_name
+  username               = var.db_username
+  password               = var.db_password
+  subnet_group_name      = ""
+  vpc_security_group_ids = []
+  identifier             = "matiu-db"
+  skip_final_snapshot    = true
+}
 module "lb" {
   source              = "./loadbalancing"
   security_groups     = [module.networking.db_security_group_id]
@@ -36,20 +35,21 @@ module "lb" {
   listener_protocol   = "HTTP"
 }
 
-data "aws_security_group" "public" {
-  name = local.security_groups.public.name
-  depends_on = [
-    module.networking,
-  ]
-}
-
 module "compute" {
-  source           = "./compute"
-  instance_count   = 2
-  instance_type    = "t3.micro"
-  public_sg        = data.aws_security_group.public.id
-  public_subnets   = module.networking.public_subnet_ids
-  vol_size         = 10
-  ssh-pub-key-name = "matiu-ssh-key"
-  ssh-pub-key-path = "~/.ssh/id_rsa.pub"
+  source              = "./compute"
+  instance_count      = 2
+  instance_type       = "t3.micro"
+  public_sg           = module.networking.public_security_group_id
+  public_subnets      = module.networking.public_subnet_ids
+  vol_size            = 10
+  ssh-pub-key-name    = "matiu-ssh-key"
+  ssh-pub-key-path    = "~/.ssh/id_rsa.pub"
+  db_endpoint         = module.database.endpoint
+  db_username         = var.db_username
+  db_password         = var.db_password
+  db_name             = var.db_name
+  user_data_tmpl_path = "userdata.tpl"
+  depends_on = [
+    module.database, module.networking
+  ]
 }

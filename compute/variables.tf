@@ -35,3 +35,28 @@ variable "ssh-pub-key-path" {
   description = "The path from which to load the SSH public key file data"
   default     = "~/.ssh/id_rsa.pub"
 }
+
+variable "user_data_tmpl_path" {
+  type        = string
+  description = "The path to the terraform template file that will be used to bootstrap the EC2 instances (in their user_data)"
+}
+
+variable "db_endpoint" {
+  type        = string
+  description = "The endpoint so the EC2 instances can connect to the database"
+}
+
+variable "db_username" {
+  type        = string
+  description = "DB Username"
+}
+
+variable "db_password" {
+  type        = string
+  description = "DB password"
+}
+
+variable "db_name" {
+  type        = string
+  description = "Name of the database to connect to"
+}
