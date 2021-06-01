@@ -44,10 +44,12 @@ data "aws_security_group" "public" {
 }
 
 module "compute" {
-  source         = "./compute"
-  instance_count = 2
-  instance_type  = "t3.micro"
-  public_sg      = data.aws_security_group.public.id
-  public_subnets = module.networking.public_subnet_ids
-  vol_size       = 10
+  source           = "./compute"
+  instance_count   = 2
+  instance_type    = "t3.micro"
+  public_sg        = data.aws_security_group.public.id
+  public_subnets   = module.networking.public_subnet_ids
+  vol_size         = 10
+  ssh-pub-key-name = "matiu-ssh-key"
+  ssh-pub-key-path = "~/.ssh/id_rsa.pub"
 }

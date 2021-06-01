@@ -24,3 +24,14 @@ variable "vol_size" {
   description = "The size in GiB for the volume for each instance"
   default     = 10
 }
+
+variable "ssh-pub-key-name" {
+  type        = string
+  description = "The AWS name for the public part of the ssh key, used to access the instances via SSH"
+}
+
+variable "ssh-pub-key-path" {
+  type        = string
+  description = "The path from which to load the SSH public key file data"
+  default     = "~/.ssh/id_rsa.pub"
+}

@@ -12,6 +12,11 @@ resource "random_id" "ec2-instance" {
   count       = var.instance_count
 }
 
+resource "aws_key_pair" "ssh-pub-key" {
+  key_name   = var.ssh-pub-key-name
+  public_key = file(var.ssh-pub-key-path)
+}
+
 resource "aws_instance" "matiu-ec2-instance" {
   count         = var.instance_count
   instance_type = var.instance_type
@@ -24,4 +29,5 @@ resource "aws_instance" "matiu-ec2-instance" {
   root_block_device {
     volume_size = var.vol_size
   }
+  key_name = aws_key_pair.ssh-pub-key.key_name
 }
