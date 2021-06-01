@@ -44,3 +44,8 @@ variable "db_password" {
     error_message = "DB Password must be at least 8 characters."
   }
 }
+
+variable "dns-zone-name" {
+  type        = string
+  description = "The name of the existing DNS zone (so we can look it up in AWS)"
+}

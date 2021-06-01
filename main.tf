@@ -53,3 +53,9 @@ module "compute" {
     module.database, module.networking
   ]
 }
+
+module "dns" {
+  source           = "./dns"
+  zone_name        = var.dns-zone-name
+  host-ip-mappings = { for i in range(length(module.compute.ssh_access)) : "node-${i}" => module.compute.ssh_access[i].public_ip }
+}
