@@ -22,7 +22,7 @@ resource "aws_instance" "matiu-ec2-instance" {
   instance_type = var.instance_type
   ami           = data.aws_ami.ubuntu_18_04.id
   tags = {
-    Name = "matiu-node-${random_id.ec2-instance[count.index].dec}"
+    Name = local.ec2-instance-names[count.index]
   }
   vpc_security_group_ids = [var.public_sg]
   subnet_id              = var.public_subnets[count.index]
@@ -31,7 +31,7 @@ resource "aws_instance" "matiu-ec2-instance" {
   }
   key_name = aws_key_pair.ssh-pub-key.key_name
   user_data = templatefile(var.user_data_tmpl_path, {
-    nodename    = aws_instance.matiu-ec2-instance[count.index].tags.Name
+    nodename    = local.ec2-instance-names[count.index]
     db_endpoint = var.db_endpoint
     dbuser      = var.db_username
     dbpass      = var.db_password
