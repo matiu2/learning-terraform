@@ -32,4 +32,6 @@ module "lb" {
   tg_port             = 80
   tg_protocol         = "HTTP"
   interval            = 30
+  listener_port       = 80
+  listener_protocol   = "HTTP"
 }

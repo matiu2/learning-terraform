@@ -15,4 +15,18 @@ resource "aws_lb_target_group" "tg" {
     unhealthy_threshold = var.unhealthy_threshold
     interval            = var.interval
   }
+  lifecycle {
+    ignore_changes        = [name]
+    create_before_destroy = true
+  }
+}
+
+resource "aws_lb_listener" "listener" {
+  load_balancer_arn = aws_lb.lb.arn
+  port              = var.listener_port
+  protocol          = var.listener_protocol
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.tg.arn
+  }
 }

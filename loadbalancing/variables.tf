@@ -44,3 +44,17 @@ variable "interval" {
     error_message = "Interval must be between 5 and 300 seconds."
   }
 }
+
+variable "listener_port" {
+  type        = number
+  description = "The external LB listener port"
+  validation {
+    condition     = var.listener_port > 0 && var.listener_port <= 65535
+    error_message = "Listener port must be between 1 and 65535 (inclusive)."
+  }
+}
+
+variable "listener_protocol" {
+  type        = string
+  description = "Protocol for external listener process for the LB"
+}
