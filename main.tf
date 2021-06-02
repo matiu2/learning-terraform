@@ -4,8 +4,9 @@ module "networking" {
   public_subnet_count  = 2
   private_subnet_count = 3
   ssh_access_cidr      = var.ssh_access_cidr
-  security_groups      = local.security_groups
   db_subnet_group      = true
+  public_lb_port       = 80
+  instance_to_lb_port  = 8000
 }
 
 module "database" {
@@ -23,7 +24,7 @@ module "database" {
 }
 module "lb" {
   source              = "./loadbalancing"
-  security_groups     = [module.networking.public_security_group_id]
+  security_groups     = [module.networking.lb_security_group_id]
   public_subnets      = module.networking.public_subnet_ids
   vpc_id              = module.networking.vpc_id
   healthy_threshold   = 2
@@ -40,7 +41,7 @@ module "compute" {
   ami_id              = var.ami_id
   instance_count      = var.instance_count
   instance_type       = "t3.micro"
-  public_sg           = module.networking.public_security_group_id
+  public_sg           = module.networking.instances_security_group_id
   public_subnets      = module.networking.public_subnet_ids
   vol_size            = 10
   ssh-pub-key-name    = "matiu-ssh-key"

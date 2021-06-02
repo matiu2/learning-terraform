@@ -71,41 +71,53 @@ resource "aws_default_route_table" "matiu-default-rt" {
   tags                   = { Name = "matiu-default-rt" }
 }
 
-resource "aws_security_group" "matiu-security-groups" {
-  for_each    = var.security_groups
-  name        = each.value.name
-  description = each.value.description
+resource "aws_security_group" "instance-sg" {
+  name        = "instance-sg"
+  description = "Security group for ec2 instances"
   vpc_id      = aws_vpc.matiu_vpc.id
-  dynamic "ingress" {
-    for_each = each.value.ingress_rules
-    content {
-      from_port   = ingress.value.from
-      to_port     = ingress.value.to
-      protocol    = ingress.value.protocol
-      cidr_blocks = ingress.value.cidr_blocks
-    }
-  }
-  dynamic "ingress" {
-    for_each = { for i in range(length(each.value.allowed_ingress_ports)) : "${i}" => { port = each.value.allowed_ingress_ports[i] } }
-    content {
-      from_port   = ingress.value.port
-      to_port     = ingress.value.port
-      protocol    = "tcp"
-      cidr_blocks = ["0.0.0.0/0"]
-    }
-  }
 }
 
-resource "aws_security_group_rule" "matiu-security-groups-all-egress" {
-  // All public security groups get full egress
-  for_each          = aws_security_group.matiu-security-groups
-  type              = "egress"
-  from_port         = 0
-  to_port           = 0
-  protocol          = "all"
-  cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id = each.value.id
+resource "aws_security_group" "lb-sg" {
+  name        = "lb-sg"
+  description = "Security group for the load balancer"
+  vpc_id      = aws_vpc.matiu_vpc.id
 }
+
+resource "aws_security_group" "rds-sg" {
+  name        = "rds-sg"
+  description = "Security group for the database"
+  vpc_id      = aws_vpc.matiu_vpc.id
+}
+
+resource "aws_security_group_rule" "instance-ssh" {
+  security_group_id = aws_security_group.instance-sg.id
+  type              = "ingress"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = [var.ssh_access_cidr]
+}
+
+resource "aws_security_group_rule" "instance-loadbalancer" {
+  // Allow the LB to talk to the instances on whatever port they're serving on
+  security_group_id        = aws_security_group.instance-sg.id
+  type                     = "ingress"
+  from_port                = var.instance_to_lb_port
+  to_port                  = var.instance_to_lb_port
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.lb-sg.id
+}
+
+resource "aws_security_group_rule" "lb-incoming" {
+  // Allow people to hit the load balancer on whatever port it's serving on
+  security_group_id = aws_security_group.lb-sg.id
+  type              = "ingress"
+  from_port         = var.public_lb_port
+  to_port           = var.public_lb_port
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
 
 resource "aws_db_subnet_group" "matiu-rds-subnets" {
   count      = var.db_subnet_group ? 1 : 0

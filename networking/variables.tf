@@ -31,8 +31,16 @@ variable "ssh_access_cidr" {
   }
 }
 
-variable "security_groups" {
-  description = "Inbound security groups"
+variable "public_lb_port" {
+  type        = number
+  description = "Ports to allow incoming on the load balancer"
+  default     = 80
+}
+
+variable "instance_to_lb_port" {
+  type        = number
+  description = "The port that the instance serves on and the LB should connect to the instance on"
+  default     = 8000
 }
 
 variable "db_subnet_group" {
