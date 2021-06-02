@@ -10,3 +10,12 @@ resource "aws_route53_record" "instances" {
   ttl     = "5"
   records = [var.host-ip-mappings[count.index].public_ip]
 }
+
+resource "aws_route53_record" "main" {
+  zone_id = data.aws_route53_zone.zone.id
+  name    = "test"
+  type    = "CNAME"
+  ttl     = "5"
+  records = [var.lb_dns_name]
+}
+

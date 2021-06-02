@@ -3,7 +3,7 @@ locals {
     public = {
       name                  = "public-sg",
       description           = "Security group for public access",
-      allowed_ingress_ports = [80, 443]
+      allowed_ingress_ports = [80, 443, 8000]
       ingress_rules = {
         ssh = {
           from        = 22
@@ -11,12 +11,6 @@ locals {
           protocol    = "tcp"
           cidr_blocks = [var.ssh_access_cidr]
         },
-        ngnx = {
-          from        = 8000
-          to          = 8000
-          protocol    = "tcp"
-          cidr_blocks = [var.ssh_access_cidr]
-        }
       },
     },
     rds = {

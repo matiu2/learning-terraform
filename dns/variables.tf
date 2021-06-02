@@ -7,3 +7,8 @@ variable "zone_name" {
   type        = string
   description = "The DNS zone to use"
 }
+
+variable "lb_dns_name" {
+  type        = string
+  description = "The DNS name provided by AWS for the load balancer. This will get CNAME mapped to test.$${zone_name}"
+}

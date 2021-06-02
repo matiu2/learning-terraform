@@ -4,3 +4,7 @@ output "hostnames" {
     ip_addresses  = record.records
   }]
 }
+
+output "main_hostname" {
+  value = "${aws_route53_record.main.name}.${data.aws_route53_zone.zone.name}"
+}

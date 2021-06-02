@@ -23,12 +23,12 @@ module "database" {
 }
 module "lb" {
   source              = "./loadbalancing"
-  security_groups     = [module.networking.db_security_group_id]
+  security_groups     = [module.networking.public_security_group_id]
   public_subnets      = module.networking.public_subnet_ids
   vpc_id              = module.networking.vpc_id
   healthy_threshold   = 2
   unhealthy_threshold = 2
-  tg_port             = 80
+  tg_port             = 8000
   tg_protocol         = "HTTP"
   interval            = 30
   listener_port       = 80
@@ -60,4 +60,5 @@ module "dns" {
   source           = "./dns"
   zone_name        = var.dns-zone-name
   host-ip-mappings = [for i in range(var.instance_count) : { name = module.compute.instances[i].name, public_ip = module.compute.instances[i].public_ip }]
+  lb_dns_name      = module.lb.dns_name
 }

@@ -10,6 +10,10 @@ output "dns" {
   value = module.dns.hostnames
 }
 
-output "load_balancer_dns_name" {
+output "aws_load_balancer_dns_name" {
   value = module.lb.dns_name
+}
+
+output "main_dns_name" {
+  value = module.dns.main_hostname
 }
