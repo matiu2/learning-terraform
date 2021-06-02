@@ -53,6 +53,7 @@ module "compute" {
   depends_on = [
     module.database, module.networking
   ]
+  aws_lb_target_group_arn = module.lb.target_group_arn
 }
 
 module "dns" {

@@ -32,3 +32,10 @@ resource "aws_instance" "matiu-ec2-instance" {
     create_before_destroy = true
   }
 }
+
+resource "aws_lb_target_group_attachment" "tg_attach" {
+  count            = var.instance_count
+  target_group_arn = var.aws_lb_target_group_arn
+  target_id        = aws_instance.matiu-ec2-instance[count.index].id
+  port             = 8000
+}

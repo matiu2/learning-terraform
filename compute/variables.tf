@@ -65,3 +65,9 @@ variable "db_name" {
   type        = string
   description = "Name of the database to connect to"
 }
+
+
+variable "aws_lb_target_group_arn" {
+  type        = string
+  description = "The ARN of the target group for the load balancer"
+}
