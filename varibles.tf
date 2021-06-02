@@ -49,3 +49,13 @@ variable "dns-zone-name" {
   type        = string
   description = "The name of the existing DNS zone (so we can look it up in AWS)"
 }
+
+variable "instance_count" {
+  type        = number
+  description = "The number of instances to create"
+  default     = 2
+  validation {
+    condition     = var.instance_count <= 2
+    error_message = "Don't create too many instances, so we can save money."
+  }
+}

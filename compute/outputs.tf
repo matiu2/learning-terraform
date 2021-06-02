@@ -1,7 +1,8 @@
-output "ssh_access" {
+output "instances" {
   value = [for instance in aws_instance.matiu-ec2-instance : {
-    name      = instance.tags.Name,
-    key_name  = instance.key_name,
-    public_ip = instance.public_ip
+    instance_id = instance.id
+    name        = instance.tags.Name,
+    key_name    = instance.key_name,
+    public_ip   = instance.public_ip
   }]
 }

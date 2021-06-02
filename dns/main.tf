@@ -3,10 +3,10 @@ data "aws_route53_zone" "zone" {
 }
 
 resource "aws_route53_record" "instances" {
-  for_each = var.host-ip-mappings
-  zone_id  = data.aws_route53_zone.zone.id
-  name     = each.key
-  type     = "A"
-  ttl      = "5"
-  records  = [each.value]
+  count   = length(var.host-ip-mappings)
+  zone_id = data.aws_route53_zone.zone.id
+  name    = var.host-ip-mappings[count.index].name
+  type    = "A"
+  ttl     = "5"
+  records = [var.host-ip-mappings[count.index].public_ip]
 }

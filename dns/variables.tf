@@ -1,6 +1,6 @@
 variable "host-ip-mappings" {
-  type        = map(string)
-  description = "Map of hostname->string, to create DNS A records of '(var.key).(zone_name)' (hostname) -> var.value (ip address) "
+  type        = list(map(string))
+  description = "List of {hostname, public_ip}, to create DNS A records of '(hostname).(var.zone_name)' (public_ip)"
 }
 
 variable "zone_name" {

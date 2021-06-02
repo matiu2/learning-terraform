@@ -37,7 +37,7 @@ module "lb" {
 
 module "compute" {
   source              = "./compute"
-  instance_count      = 2
+  instance_count      = var.instance_count
   instance_type       = "t3.micro"
   public_sg           = module.networking.public_security_group_id
   public_subnets      = module.networking.public_subnet_ids
@@ -57,5 +57,5 @@ module "compute" {
 module "dns" {
   source           = "./dns"
   zone_name        = var.dns-zone-name
-  host-ip-mappings = { for i in range(length(module.compute.ssh_access)) : "node-${i}" => module.compute.ssh_access[i].public_ip }
+  host-ip-mappings = [for i in range(var.instance_count) : { name = module.compute.instances[i].name, public_ip = module.compute.instances[i].public_ip }]
 }
