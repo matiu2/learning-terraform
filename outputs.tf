@@ -9,3 +9,7 @@ output "instances" {
 output "dns" {
   value = module.dns.hostnames
 }
+
+output "load_balancer_dns_name" {
+  value = module.lb.dns_name
+}
