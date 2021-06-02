@@ -11,6 +11,12 @@ locals {
           protocol    = "tcp"
           cidr_blocks = [var.ssh_access_cidr]
         },
+        ngnx = {
+          from        = 8000
+          to          = 8000
+          protocol    = "tcp"
+          cidr_blocks = [var.ssh_access_cidr]
+        }
       },
     },
     rds = {
@@ -27,5 +33,6 @@ locals {
       }
 
     }
+
   }
 }

@@ -37,6 +37,7 @@ module "lb" {
 
 module "compute" {
   source              = "./compute"
+  ami_id              = var.ami_id
   instance_count      = var.instance_count
   instance_type       = "t3.micro"
   public_sg           = module.networking.public_security_group_id

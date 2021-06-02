@@ -1,3 +1,8 @@
+variable "ami_id" {
+  type        = string
+  description = "The AMI ID for the image, from which to build the instances. eg. ami-0585c832178a3fc32"
+}
+
 variable "instance_count" {
   type        = number
   description = "How many ec2 instances to create"
