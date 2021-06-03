@@ -31,6 +31,22 @@ resource "aws_instance" "matiu-ec2-instance" {
   lifecycle {
     create_before_destroy = true
   }
+  provisioner "remote-exec" {
+    connection {
+      type        = "ssh"
+      user        = "ubuntu"
+      host        = self.public_ip
+      private_key = file("~/.ssh/id_rsa")
+    }
+    script = "${path.cwd}/delay.sh"
+  }
+  provisioner "local-exec" {
+    command = templatefile("${path.cwd}/scp_script.tpl", {
+      nodeip   = self.public_ip
+      k3s_path = "${path.cwd}/.."
+      nodename = self.tags.Name
+    })
+  }
 }
 
 resource "aws_lb_target_group_attachment" "tg_attach" {
