@@ -22,11 +22,12 @@ resource "aws_instance" "matiu-ec2-instance" {
   }
   key_name = aws_key_pair.ssh-pub-key.key_name
   user_data = templatefile(var.user_data_tmpl_path, {
-    nodename    = local.ec2-instance-names[count.index]
-    db_endpoint = var.db_endpoint
-    dbuser      = var.db_username
-    dbpass      = var.db_password
-    dbname      = var.db_name
+    nodename     = local.ec2-instance-names[count.index]
+    db_endpoint  = var.db_endpoint
+    dbuser       = var.db_username
+    dbpass       = var.db_password
+    dbname       = var.db_name
+    ssh_key_path = var.ssh_key_path
   })
   lifecycle {
     create_before_destroy = true
@@ -36,16 +37,22 @@ resource "aws_instance" "matiu-ec2-instance" {
       type        = "ssh"
       user        = "ubuntu"
       host        = self.public_ip
-      private_key = file("~/.ssh/id_rsa")
+      private_key = file(var.ssh_key_path)
     }
     script = "${path.cwd}/delay.sh"
   }
   provisioner "local-exec" {
     command = templatefile("${path.cwd}/scp_script.tpl", {
-      nodeip   = self.public_ip
-      k3s_path = "${path.cwd}/.."
-      nodename = self.tags.Name
+      nodeip       = self.public_ip
+      k3s_path     = "${path.cwd}/.."
+      nodename     = self.tags.Name
+      ssh_key_path = var.ssh_key_path
     })
+  }
+  provisioner "local-exec" {
+    when        = destroy
+    working_dir = "${path.cwd}/.."
+    command     = "rm -f k3s-${self.tags.Name}.yaml"
   }
 }
 

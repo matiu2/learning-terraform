@@ -66,8 +66,13 @@ variable "db_name" {
   description = "Name of the database to connect to"
 }
 
-
 variable "aws_lb_target_group_arn" {
   type        = string
   description = "The ARN of the target group for the load balancer"
+}
+
+variable "ssh_key_path" {
+  type        = string
+  description = "Path to your SSH private key"
+  default     = "~/.ssh/id_rsa"
 }

@@ -46,6 +46,7 @@ module "compute" {
   vol_size            = 10
   ssh-pub-key-name    = "matiu-ssh-key"
   ssh-pub-key-path    = "~/.ssh/id_rsa.pub"
+  ssh_key_path        = var.ssh_key_path
   db_endpoint         = module.database.endpoint
   db_username         = var.db_username
   db_password         = var.db_password

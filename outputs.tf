@@ -17,3 +17,8 @@ output "aws_load_balancer_dns_name" {
 output "main_dns_name" {
   value = module.dns.main_hostname
 }
+
+output "kubecfg" {
+  value     = [for insntance in module.compute.instances : "export KUBECONFIG=../k3s-${insntance.name}.yaml"]
+  sensitive = true
+}

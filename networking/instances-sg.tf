@@ -22,22 +22,12 @@ resource "aws_security_group_rule" "instance-kubectl" {
   cidr_blocks       = [var.ssh_access_cidr]
 }
 
-resource "aws_security_group_rule" "instance-http-out" {
+resource "aws_security_group_rule" "instance-all-out" {
   // This is required at the start to install kubectl (when running the provisioners)
   security_group_id = aws_security_group.instance-sg.id
   type              = "egress"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
-resource "aws_security_group_rule" "instance-https-out" {
-  // This is required at the start to install kubectl (when running the provisioners)
-  security_group_id = aws_security_group.instance-sg.id
-  type              = "egress"
-  from_port         = 443
-  to_port           = 443
+  from_port         = 0
+  to_port           = 65535
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
 }

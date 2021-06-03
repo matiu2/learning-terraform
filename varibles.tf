@@ -64,3 +64,9 @@ variable "ami_id" {
   type        = string
   description = "The AMI ID for the image, from which to build the instances. eg. ami-0585c832178a3fc32"
 }
+
+variable "ssh_key_path" {
+  type        = string
+  description = "Path to your SSH private key"
+  default     = "~/.ssh/id_rsa"
+}
