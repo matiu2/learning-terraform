@@ -9,9 +9,9 @@ terraform {
 # Configure the AWS Provider
 provider "aws" {
   region = var.aws_region
-  default_tags {
-    tags = {
-      Terraform = "Matthew_Learning"
-    }
-  }
+  # default_tags {
+  #   tags = {
+  #     Terraform = "Matthew_Learning"
+  #   }
+  # }
 }
